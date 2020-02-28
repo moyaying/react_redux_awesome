@@ -11,7 +11,7 @@ export default function demoReducer(state = initState, action) {
     case DemoActions.REQUEST_DEMO_DATA:
       return { ...state, status: "loading", msg: "", data: "" };
     case DemoActions.SUCCESS_DEMO_DATA:
-      return { ...state, status: "success", msg: "", data: action.data };
+      return { ...state, status: "success", msg: "success", data: action.data };
     case DemoActions.CANCEL_DEMO_DATA:
       return { ...state, status: "cancel", data: "" };
     case DemoActions.FAIL_DEMO_DATA:

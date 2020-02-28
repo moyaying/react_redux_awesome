@@ -9,7 +9,8 @@ import { requestDemoData, DemoActions } from "../actions";
 
 const styles = theme => ({
   root: {
-    flex: 1
+    flex: 1,
+    color: "#ff0000"
   }
 });
 
@@ -21,11 +22,8 @@ class Main extends Component {
 
   render() {
     const { classes, demoState } = this.props;
-
-    console.log(demoState);
-
     return (
-      <Typography component="div">
+      <Typography component="div" className={classes.root}>
         <Box m={2}>
           <Box fontSize="h6.fontSize">hello demo</Box>
           <Box>data: {demoState.data}</Box>
