@@ -1,6 +1,6 @@
 {
   "name": "web",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.9.4",
@@ -37,5 +37,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "react_redux_awesome",
+  "main": "index.js",
+  "repository": "https://github.com/moyaying/react_redux_awesome.git",
+  "author": "naruto.j <15115790290@hot.com",
+  "license": "MIT"
 }
