@@ -1,3 +1,10 @@
+### Used library:  
+- react https://zh-hans.reactjs.org/
+- redux https://cn.redux.js.org/
+- redux-observable https://redux-observable-cn.js.org/
+- material ui https://material-ui.com/zh/
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
