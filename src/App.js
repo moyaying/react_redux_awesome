@@ -8,6 +8,7 @@ import main from './containers/main';
 
 const store = configureStore();
 
+//todo
 class App extends Component {
   render() {
     return (
