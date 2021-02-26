@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script type="text/javascript">
+        window.addEventListener('load', async () => {
+             // Modern dapp browsers...
+              if (window.ethereum) {
+                window.web3 = new Web3(window.ethereum);
+                try {
+                  // Request account access if needed
+                   await window.ethereum.enable();
+                    console.log("1111");
+                    document.getElementById("output").innerHTML = "111";
+
+                } catch (error) {
+                    console.log("2222");
+                  // User denied account access...
+                    document.getElementById("output").innerHTML = error;
+                    console.error(error);
+                }
+              } // Legacy dapp browsers...
+              else if (window.web3) {
+                  document.getElementById("output").innerHTML = "131313";
+                window.web3 = new Web3(web3.currentProvider);
+              }
+              // Non-dapp browsers...
+              else {
+                  document.getElementById("output").innerHTML = "Non-Ethereum browser detected. You should consider trying MetaMask!";
+
+                  console.log("Non-Ethereum browser detected. You should consider trying MetaMask!");
+              }
+        })
+        async function getBalance()  {
+            document.getElementById("output").innerHTML = " && ";
+
+            // await web3.eth.getAccounts();
+            // document.getElementById("output").innerHTML = "44444";
+            // try{
+            //     await web3.eth.getAccounts();
+            // }catch (e) {
+            //     document.getElementById("output").innerHTML = "232323   " + e;
+            // }
+            // document.getElementById("output").innerHTML = "6666   ";
+            var address, wei, balance
+            // address = document.getElementById("address").value
+            address = await web3.eth.getAccounts();
+            // console.log("address1111 ==  ",address[0]);
+            document.getElementById("output").innerHTML = address[0];
+            try {
+                let isAlphaWallet = window.ethereum.isHynWallet
+                document.getElementById("output").innerHTML = isAlphaWallet;
+
+                // let signed = await web3.eth.sign("Hello world", address[0]);
+                // document.getElementById("output").innerHTML = 'signed:' + signed;
+
+                // web3.eth.getBalance(address[0], function (error, wei) {
+                //     if (!error) {
+                //         // var balance = web3.fromWei(wei, 'ether');
+                //         document.getElementById("output").innerHTML = address[0] + "   " + wei + " wei";
+                //     }
+                // });
+            } catch (err) {
+                document.getElementById("output").innerHTML = err;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>ETH Balance Fetcher</h1>
+    <p>Enter your Ethereum Address:</p>
+    <input type="text" size="50" id="address" />
+    <button type="button" onClick="getBalance();">Get Balance</button>
+    <br />
+    <br />
+    <div id="output"></div>
+</body>
+</html>
