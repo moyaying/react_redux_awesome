@@ -6,7 +6,8 @@
     <script type="text/javascript">
         window.addEventListener('load', async () => {
              // Modern dapp browsers...
-              if (window.ethereum) {
+            console.log("123123");
+            if (window.ethereum) {
                 window.web3 = new Web3(window.ethereum);
                 try {
                   // Request account access if needed
@@ -32,7 +33,13 @@
                   console.log("Non-Ethereum browser detected. You should consider trying MetaMask!");
               }
         })
+        async function getBalance22()  {
+            console.log("555  getBalance");
+
+        }
         async function getBalance()  {
+            console.log("2222  getBalance");
+            // signMessage111.postMessage("JS调用了Flutter");
             document.getElementById("output").innerHTML = " && ";
 
             // await web3.eth.getAccounts();
@@ -49,11 +56,12 @@
             // console.log("address1111 ==  ",address[0]);
             document.getElementById("output").innerHTML = address[0];
             try {
-                let isAlphaWallet = window.ethereum.isHynWallet
-                document.getElementById("output").innerHTML = isAlphaWallet;
+                var addressHex = "0x7739277722398283947";
+                // let isAlphaWallet = window.ethereum.isHynWallet;
+                // document.getElementById("output").innerHTML = isAlphaWallet + address[0];
 
-                // let signed = await web3.eth.sign("Hello world", address[0]);
-                // document.getElementById("output").innerHTML = 'signed:' + signed;
+                let signed = await web3.eth.sign("Hello world", address[0]);
+                document.getElementById("output").innerHTML = 'signed:' + signed + "  " +addressHex + "  " + address[0];
 
                 // web3.eth.getBalance(address[0], function (error, wei) {
                 //     if (!error) {
