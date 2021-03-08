@@ -90,7 +90,58 @@ class Main extends Component {
         requestDemoData();
     };
 
-    _onWeb3FunTest = async () => {
+    componentDidMount() {
+        this._onConnectWallet().then(() => {
+            console.log('wallet connected');
+        });
+    }
+
+    _testSignTransaction = async  () => {
+        const web3 = this.state.web3
+        const from = this.state.accounts[0]
+        const to = '0xF3eF871491C0dadCc974e991d58077df0f5b78bd'
+
+        try {
+            // https://web3js.readthedocs.io/en/v1.2.0/web3-eth.html#eth-sendtransaction
+            let tx = {
+                from,
+                to,
+                value: web3.utils.toWei('1.2', 'ether'),
+                gas: '21000',
+                gasPrice: web3.utils.toWei('1', 'gwei'),
+                // data: '' ,
+                // nonce: '1',
+                // chainId: '256',
+            }
+            let result = await web3.eth.signTransaction(tx, from);
+            this.setState({web3Msg: 'signTransaction:' + result})
+        } catch (e) {
+            this.setState({web3Msg: 'error:' + e.message})
+            console.error(e)
+        }
+    }
+
+    _testEthCall = async () => {
+        const web3 = this.state.web3
+        const from = this.state.accounts[0]
+
+        // Get ERC20 Token contract instance
+        // let tokenContractAddress = '0x0298c2b32eae4da002a15f36fdf7615bea3da047'   //heco mainnet husd
+        let tokenContractAddress = '0x1990f4c2D9cbB7587e1864812d0403e52fa32f03'  //heco test hyn
+        let contract = new web3.eth.Contract(minABI, tokenContractAddress);
+        let tokenBalance = await contract.methods.balanceOf(from).call();
+        this.setState({web3Msg: 'tokenBalance:' + tokenBalance})
+    }
+
+    _testGetBalance = async () => {
+        const web3 = this.state.web3
+        const from = this.state.accounts[0]
+
+        let balance = await web3.eth.getBalance(from);
+        this.setState({web3Msg: 'balance:' + balance})
+    }
+
+    _testSignTypedMessage = async () => {
         const web3 = this.state.web3
         const from = this.state.accounts[0]
         const to = '0xF3eF871491C0dadCc974e991d58077df0f5b78bd'
@@ -98,39 +149,6 @@ class Main extends Component {
         const self = this
 
         try {
-
-            // let netId = await web3.eth.net.getId();
-            // self.setState({web3Msg: 'netId:' + netId})
-            // return;
-
-            let tx = {
-                from,
-                to,
-                nance: '1',
-                chainId: '265',
-                gas: '21000',
-                gasPrice: '1000000000',
-                value: web3.utils.toWei('1.2', 'ether'),
-                data: ''
-            }
-            let signedTx = await web3.eth.signTransaction(tx)
-            self.setState({web3Msg: 'signedTx:' + signedTx})
-            return;
-
-            // Get ERC20 Token contract instance
-            // let tokenContractAddress = '0x0298c2b32eae4da002a15f36fdf7615bea3da047'   //heco mainnet husd
-            let tokenContractAddress = '0x1990f4c2D9cbB7587e1864812d0403e52fa32f03'  //heco test hyn
-            let contract = new web3.eth.Contract(minABI, tokenContractAddress);
-            console.log('xxxx11')
-            let tokenBalance = await contract.methods.balanceOf(from).call();
-            console.log('xxxx222', tokenBalance.toString())
-            self.setState({web3Msg: 'tokenBalance:' + tokenBalance})
-            return;
-
-            let balance = await web3.eth.getBalance(from);
-            self.setState({web3Msg: 'balance:' + balance})
-            return;
-
             // see https://eips.ethereum.org/EIPS/eip-712
             web3.currentProvider.sendAsync({
                 method: 'eth_signTypedData',
@@ -152,8 +170,8 @@ class Main extends Component {
                 }
             })
         } catch (e) {
-            console.error(e.stack)
-            self.setState({web3Msg: e.stack})
+            this.setState({web3Msg: 'error:' + e.message})
+            console.error(e)
         }
     }
 
@@ -194,6 +212,8 @@ class Main extends Component {
                         Request Demo Data
                     </Button>
 
+                    <Box>😊😊😊</Box>
+
                     <Box>address: {this.state.accounts ? this.state.accounts : 'please connect wallet'}</Box>
                     <Button
                         variant="contained"
@@ -202,14 +222,57 @@ class Main extends Component {
                     >
                         Connect wallet
                     </Button>
-                    <Box>web3 console: {this.state.web3Msg}</Box>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={this._onWeb3FunTest}
-                    >
-                        Web3 test
-                    </Button>
+
+                    <Box>😊</Box>
+
+                    <Box>{this.state.web3Msg}</Box>
+
+                    <Box>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={this._testEthCall}
+                        >
+                            ethCall
+                        </Button>
+                    </Box>
+
+                    <Box>😊</Box>
+
+                    <Box>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={this._testGetBalance}
+                        >
+                            getBalance
+                        </Button>
+                    </Box>
+
+                    <Box>😊</Box>
+
+                    <Box>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={this._testSignTypedMessage}
+                        >
+                            signTypedMessage
+                        </Button>
+                    </Box>
+
+                    <Box>😊</Box>
+
+                    <Box>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={this._testSignTransaction}
+                        >
+                            signTransaction
+                        </Button>
+                    </Box>
+
                 </Box>
             </Typography>
         );
