@@ -103,17 +103,16 @@ class Main extends Component {
 
         try {
             // https://web3js.readthedocs.io/en/v1.2.0/web3-eth.html#eth-sendtransaction
-            let tx = {
-                from,
+            let result = await web3.eth.signTransaction({
+                from    ,
                 to,
                 value: web3.utils.toWei('1.2', 'ether'),
                 gas: '21000',
                 gasPrice: web3.utils.toWei('1', 'gwei'),
-                // data: '' ,
+                data: '' ,
                 // nonce: '1',
                 // chainId: '256',
-            }
-            let result = await web3.eth.signTransaction(tx, from);
+            });
             this.setState({web3Msg: 'signTransaction:' + result})
         } catch (e) {
             this.setState({web3Msg: 'error:' + e.message})
