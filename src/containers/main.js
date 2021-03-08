@@ -24,6 +24,26 @@ const styles = theme => ({
     }
 });
 
+// The minimum ABI to get ERC20 Token balance
+let minABI = [
+    // balanceOf
+    {
+        "constant": true,
+        "inputs": [{"name": "_owner", "type": "address"}],
+        "name": "balanceOf",
+        "outputs": [{"name": "balance", "type": "uint256"}],
+        "type": "function"
+    },
+    // decimals
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "decimals",
+        "outputs": [{"name": "", "type": "uint8"}],
+        "type": "function"
+    }
+];
+
 
 class Main extends Component {
 
@@ -46,7 +66,8 @@ class Main extends Component {
                 "Mail": [
                     {"name": "from", "type": "Person"},
                     {"name": "to", "type": "Person"},
-                    {"name": "contents", "type": "string"
+                    {
+                        "name": "contents", "type": "string"
                     }]
             },
             "primaryType": "Mail",
@@ -69,32 +90,71 @@ class Main extends Component {
         requestDemoData();
     };
 
-    _onWeb3FunTest = () => {
+    _onWeb3FunTest = async () => {
         const web3 = this.state.web3
         const from = this.state.accounts[0]
         const to = '0xF3eF871491C0dadCc974e991d58077df0f5b78bd'
         const msgParams = this._makeMsg(from, to)
         const self = this
-        // see https://eips.ethereum.org/EIPS/eip-712
-        web3.currentProvider.sendAsync({
-            method: 'eth_signTypedData',
-            params: [from, msgParams],
-        }, function (err, result) {
-            // self.setState({web3Msg: result.result})
-            if (err) return console.error(err)
-            if (result.error) {
-                return console.error(result.error.message)
+
+        try {
+
+            // let netId = await web3.eth.net.getId();
+            // self.setState({web3Msg: 'netId:' + netId})
+            // return;
+
+            let tx = {
+                from,
+                to,
+                nance: '1',
+                chainId: '265',
+                gas: '21000',
+                gasPrice: '1000000000',
+                value: web3.utils.toWei('1.2', 'ether'),
+                data: ''
             }
-            const recovered = recoverTypedSignature({
-                data: msgParams,
-                sig: result.result
+            let signedTx = await web3.eth.signTransaction(tx)
+            self.setState({web3Msg: 'signedTx:' + signedTx})
+            return;
+
+            // Get ERC20 Token contract instance
+            // let tokenContractAddress = '0x0298c2b32eae4da002a15f36fdf7615bea3da047'   //heco mainnet husd
+            let tokenContractAddress = '0x1990f4c2D9cbB7587e1864812d0403e52fa32f03'  //heco test hyn
+            let contract = new web3.eth.Contract(minABI, tokenContractAddress);
+            console.log('xxxx11')
+            let tokenBalance = await contract.methods.balanceOf(from).call();
+            console.log('xxxx222', tokenBalance.toString())
+            self.setState({web3Msg: 'tokenBalance:' + tokenBalance})
+            return;
+
+            let balance = await web3.eth.getBalance(from);
+            self.setState({web3Msg: 'balance:' + balance})
+            return;
+
+            // see https://eips.ethereum.org/EIPS/eip-712
+            web3.currentProvider.sendAsync({
+                method: 'eth_signTypedData',
+                params: [from, msgParams],
+            }, function (err, result) {
+                // self.setState({web3Msg: result.result})
+                if (err) return console.error(err)
+                if (result.error) {
+                    return console.error(result.error.message)
+                }
+                const recovered = recoverTypedSignature({
+                    data: msgParams,
+                    sig: result.result
+                })
+                if (recovered.toLowerCase() === from.toLowerCase()) {
+                    alert('Recovered success: ' + from)
+                } else {
+                    alert('Failed to verify signer, got: ' + recovered)
+                }
             })
-            if (recovered.toLowerCase() === from.toLowerCase()) {
-                alert('Recovered success: ' + from)
-            } else {
-                alert('Failed to verify signer, got: ' + recovered)
-            }
-        })
+        } catch (e) {
+            console.error(e.stack)
+            self.setState({web3Msg: e.stack})
+        }
     }
 
     _onConnectWallet = async () => {
@@ -114,7 +174,6 @@ class Main extends Component {
                 `Failed to load web3, accounts. Check console for details.`,
             );
             console.error(error);
-            this.setState({web3Msg: error})
         }
     }
 
