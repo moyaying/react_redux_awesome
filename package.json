@@ -9,6 +9,8 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "eth-sig-util": "^3.0.1",
+    "ethereumjs-util": "^5.2.0",
+    "ethjs": "^0.4.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-redux": "^7.2.0",

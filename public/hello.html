@@ -35,6 +35,8 @@
         })
         async function getBalance22()  {
             console.log("555  getBalance");
+            address = await web3.eth.getAccounts();
+            console.log("555  getBalance" + address);
 
         }
         async function getBalance()  {
@@ -54,14 +56,24 @@
             // address = document.getElementById("address").value
             address = await web3.eth.getAccounts();
             // console.log("address1111 ==  ",address[0]);
-            document.getElementById("output").innerHTML = address[0];
+            console.log("address " + address[0]);
+            // document.getElementById("output").innerHTML = address[0];
             try {
-                var addressHex = "0x7739277722398283947";
                 // let isAlphaWallet = window.ethereum.isHynWallet;
                 // document.getElementById("output").innerHTML = isAlphaWallet + address[0];
 
-                let signed = await web3.eth.sign("Hello world", address[0]);
-                document.getElementById("output").innerHTML = 'signed:' + signed + "  " +addressHex + "  " + address[0];
+                // let signed = await web3.eth.signTransaction("Hello world", address[0]);
+                let signed = await web3.eth.signTransaction({
+                    from: "0x5c24A14B797A01BCc8eD74092c31794dDD80FB44",
+                    gasPrice: "20000000000",
+                    gas: "21000",
+                    to: '0x3535353535353535353535353535353535353535',
+                    value: "1000000000000000000",
+                    data: ""
+                }).then(console.log);
+                document.getElementById("output").innerHTML = 'signed:' + signed;
+                // let signed = await web3.eth.sign("Hello world", address[0]);
+                // document.getElementById("output").innerHTML = 'signed:' + signed + "  " +addressHex + "  " + address[0];
 
                 // web3.eth.getBalance(address[0], function (error, wei) {
                 //     if (!error) {
@@ -79,7 +91,7 @@
     <h1>ETH Balance Fetcher</h1>
     <p>Enter your Ethereum Address:</p>
     <input type="text" size="50" id="address" />
-    <button type="button" onClick="getBalance();">Get Balance</button>
+    <button type="button" onClick="getBalance22();">Get Balance</button>
     <br />
     <br />
     <div id="output"></div>
