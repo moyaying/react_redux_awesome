@@ -305,6 +305,7 @@ class Main extends Component {
 
         const data = '0xca96dcaec4f58bb331596b5f5ebc60a0b6745da9155cd056bc6c08e48a87fe0d'
 //metamask result 0x9c34258ec7cc6903bebe786d6d7b731186ff428af889ce94678e60755a3edd20026cc8861d4cca1364449a65f36e19134a4a30388fd3a8db4aecc083ca332e271b
+        const self = this
 
         try {
             // https://web3js.readthedocs.io/en/v1.2.0/web3-eth.html#eth-sendtransaction
@@ -318,9 +319,9 @@ class Main extends Component {
                 if (result.error) {
                     return console.error(result.error.message)
                 }
+                self.setState({web3Msg: 'signPersonalMessage:' + result.result})
             })
             console.log('wallet _testSignPersonalMessage' + result);
-            this.setState({web3Msg: 'signPersonalMessage:' + result})
         } catch (e) {
             this.setState({web3Msg: 'error:' + e.message})
             console.error(e)
@@ -394,7 +395,8 @@ class Main extends Component {
                     return console.error(result.error)
                 }
                 console.log(result.result)
-                const recovered = recoverTypedSignature({
+                self.setState({web3Msg: 'signTypeMessage:' + result.result})
+                /*const recovered = recoverTypedSignature({
                     data: msgParams,
                     sig: result.result
                 })
@@ -403,7 +405,7 @@ class Main extends Component {
                     alert('Recovered success: ' + from)
                 } else {
                     alert('Failed to verify signer, got: ' + recovered)
-                }
+                }*/
             })
         } catch (e) {
             this.setState({web3Msg: 'error:' + e.message})
